@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1030848200532",
+    "firebase_url": "https://tutee---a-notes-and-attendance-default-rtdb.firebaseio.com",
+    "project_id": "tutee---a-notes-and-attendance",
+    "storage_bucket": "tutee---a-notes-and-attendance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030848200532:android:8d460620d5c417c356d2c1",
+        "android_client_info": {
+          "package_name": "com.jpnce.tutee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030848200532-1k0h855837cdh38nd69tgkk83o68vkfv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jpnce.tutee",
+            "certificate_hash": "5b28a0eecdc0f589dfe80dc5acb4626ff578de04"
+          }
+        },
+        {
+          "client_id": "1030848200532-nqu0ta0e3dous3uc5eni735unu8o4l95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU5JY5FnT2hdJ9XP_jWoNQ9YzmLh5r7dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030848200532-nqu0ta0e3dous3uc5eni735unu8o4l95.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

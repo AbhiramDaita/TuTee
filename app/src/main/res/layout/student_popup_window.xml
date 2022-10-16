@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popup_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@null">
+        <RelativeLayout
+            android:id="@+id/popup_dialog"
+            android:layout_width="300dp"
+            android:layout_height="410dp"
+            android:layout_centerInParent="true"
+            android:background="@color/White">
+            <TextView
+                android:id="@+id/closebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="x"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"/>
+            <ImageView
+                android:id="@+id/logoutbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_login_24"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                app:tint="#000"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <!-- Heading -->
+                <LinearLayout
+                    android:id="@+id/popup_dialog_ll_heading_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="TuTee"
+
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        tools:ignore="MissingConstraints,TouchTargetSizeCheck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-3dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="a notes and attendance"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="3.5sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-25dp"
+                        android:layout_marginRight="40dp"
+                        tools:ignore="MissingConstraints">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerHorizontal="false"
+
+                            app:cardCornerRadius="18dp"
+                            tools:ignore="MissingConstraints">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/logo" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="15dp"
+                        android:text="UserName" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
+                <RelativeLayout
+                    android:id="@+id/popup_element"
+                    android:layout_width="280dp"
+                    android:layout_height="290dp"
+                    android:background="@null">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="-5dp">
+
+                        <ImageView
+                            android:id="@+id/home"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/ic_baseline_home_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvhome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/home"
+                            android:layout_marginLeft="15dp"
+                            android:layout_toEndOf="@+id/home"
+                            android:layout_toRightOf="@+id/home"
+                            android:text="Home"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+
+                        <ImageView
+                            android:id="@+id/nt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/home"
+                            android:layout_alignLeft="@+id/home"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_baseline_notifications_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvnt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvhome"
+                            android:layout_alignTop="@+id/nt"
+                            android:text="Notifications"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/notes"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_below="@+id/nt"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/note"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvnotes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvnt"
+                            android:layout_alignTop="@+id/notes"
+                            android:text="View Notes"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+<!--
+                        <ImageView
+                            android:id="@+id/uploadnote"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/nt"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_baseline_cloud_upload_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvuploadnotes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvnt"
+                            android:layout_alignTop="@+id/uploadnote"
+                            android:text="Upload Notes"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                        -->
+
+                        <ImageView
+                            android:id="@+id/viewstudents"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_below="@+id/notes"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/student"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvstudent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvnotes"
+                            android:layout_alignTop="@+id/viewstudents"
+                            android:text="View Attendance"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/rate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/viewstudents"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/rating" />
+
+                        <TextView
+                            android:id="@+id/tvrate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvstudent"
+                            android:layout_alignTop="@+id/rate"
+                            android:text="Rate Us For App"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/ideas"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_below="@+id/rate"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/feature"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvidea"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvrate"
+                            android:layout_alignTop="@+id/ideas"
+                            android:text="New Idea's"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/about"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/ideas"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_baseline_perm_identity_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvabout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvidea"
+                            android:layout_alignTop="@+id/about"
+                            android:text="Our Team"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/hf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/about"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_baseline_help_outline_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvhf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvabout"
+                            android:layout_alignTop="@+id/hf"
+                            android:text="Help And FeedBack"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <ImageView
+                            android:id="@+id/logoutbtn1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/hf"
+                            android:layout_alignLeft="@+id/nt"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_baseline_login_24"
+                            app:tint="#000"/>
+
+                        <TextView
+                            android:id="@+id/tvlogoutbtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/tvhf"
+                            android:layout_alignTop="@+id/logoutbtn1"
+                            android:text="Logout"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider"/>
+
+                <!--copytright-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="bottom"
+                    android:text="©2022 JPNCE TuTee"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="5sp"
+                    android:layout_marginTop="6dp"
+                    android:textStyle="bold"
+                    tools:ignore="RtlCompat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="2dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="bottom"
+                    android:text="All Rights Reserved"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="4dp"
+                    android:textStyle="bold"
+                    tools:ignore="RtlCompat" />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>
