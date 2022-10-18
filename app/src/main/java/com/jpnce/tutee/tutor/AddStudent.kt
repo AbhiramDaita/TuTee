@@ -54,159 +54,33 @@ import com.jpnce.tutee.parent.ParentDashboard
 import com.jpnce.tutee.parent.ParentSignin
 import androidx.annotation.RequiresApi
 import android.os.Build
+import android.provider.Settings.Global
 import android.util.Log
 import android.view.*
 import android.widget.*
 import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.jpnce.tutee.adapter.viewNotesAdapter.viewholder
 import com.jpnce.tutee.student.StudentRealDashboard
 import com.jpnce.tutee.student.StudentResetPasswordActivity
 import com.jpnce.tutee.student.StudentViewNotes
 import com.jpnce.tutee.student.StudentDashboard
 import com.jpnce.tutee.student.StudentSignin
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
+import java.io.IOException
 import java.util.HashMap
 import java.util.regex.Pattern
 
-class AddStudent constructor() : AppCompatActivity() {
-    var et_email: EditText? = null
-    var et_password: EditText? = null
-    var et_confirmPassword: EditText? = null
-    var et_username: EditText? = null
-    var et_subject: EditText? = null
-    lateinit var btn_Register: Button
-    var emailRegex: String = ("^[a-zA-Z0-9_+&*-]+(?:\\." +
-            "[a-zA-Z0-9_+&*-]+)*@" +
-            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-            "A-Z]{2,7}$")
-    var pat: Pattern = Pattern.compile(emailRegex)
-    var progressDialog: ProgressDialog? = null
-    var mAuth: FirebaseAuth? = null
-    var mUser: FirebaseUser? = null
-    var reference: DatabaseReference? = null
-    var teacherId: String? = ""
-    var teacherEmail: String? = ""
-    var teacherPassword: String? = ""
+class AddStudent : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_student)
-        et_username = findViewById(R.id.et_username)
-        et_email = findViewById(R.id.et_email)
-        et_password = findViewById(R.id.et_password)
-        et_subject = findViewById(R.id.et_subject)
-        et_confirmPassword = findViewById(R.id.et_confirmPassword)
-        btn_Register = findViewById(R.id.btn_register)
-        progressDialog = ProgressDialog(this)
-        intent = getIntent()
-        teacherId = intent.getStringExtra("teacherId")
-        teacherEmail = intent.getStringExtra("email")
-        teacherPassword = intent.getStringExtra("password")
-        mAuth = FirebaseAuth.getInstance()
-        mUser = mAuth!!.getCurrentUser()
-        btn_Register.setOnClickListener(object : View.OnClickListener {
-            public override fun onClick(v: View) {
-                PerformAuth()
-            }
-        })
-    }
 
-    private fun PerformAuth() {
-        val email: String = et_email!!.getText().toString()
-        val password: String = et_password!!.getText().toString()
-        val confirmPassword: String = et_confirmPassword!!.getText().toString()
-        val username: String = et_username!!.getText().toString()
-        val subject: String = et_subject!!.getText().toString()
-        if (email.isEmpty()) {
-            et_email!!.setError("Please Enter Email")
-            return
-        } else if (!pat.matcher(email).matches()) {
-            et_email!!.setError("Please Enter a valid Email")
-            return
-        } else if (password.isEmpty()) {
-            et_password!!.setError("Please input Password")
-            return
-        } else if (password.length < 6) {
-            et_password!!.setError("Password too short")
-            return
-        } else if (!(confirmPassword == password)) {
-            et_confirmPassword!!.setError("Password doesn't matches")
-            return
-        } else if (subject.isEmpty()) {
-            et_subject!!.setError("Please Enter Subject")
-            return
-        } else {
-            progressDialog!!.setMessage("Creating Account....")
-            progressDialog!!.setTitle("Creating")
-            progressDialog!!.setCanceledOnTouchOutside(false)
-            progressDialog!!.show()
-            mAuth!!.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(object : OnCompleteListener<AuthResult?> {
-                    public override fun onComplete(task: Task<AuthResult?>) {
-                        if (task.isSuccessful()) {
-                            progressDialog!!.dismiss()
-                            val firebaseUser: FirebaseUser? = mAuth!!.getCurrentUser()
-                            val userId: String = firebaseUser!!.getUid()
-                            reference = FirebaseDatabase.getInstance().getReference()
-                                .child(TutorSignUp.Companion.STUDENTS_USER).child(
-                                (teacherId)!!
-                            )
-                            val hashMap: HashMap<String, String> = HashMap()
-                            hashMap.put("id", userId)
-                            hashMap.put("studentName", username)
-                            hashMap.put("email", email)
-                            hashMap.put("password", password)
-                            hashMap.put("studentSubject", subject)
-                            reference!!.push().setValue(hashMap)
-                                .addOnCompleteListener(object : OnCompleteListener<Void?> {
-                                    public override fun onComplete(task: Task<Void?>) {
-                                        if (task.isSuccessful()) {
-                                            loginTeacher(teacherEmail, teacherPassword)
-                                            sendUserToMainActivity()
-                                        }
-                                    }
-                                })
-                            Toast.makeText(
-                                this@AddStudent,
-                                "Registration Successful",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            progressDialog!!.dismiss()
-                            Log.d("TAG", "onComplete: " + task.getException())
-                            Toast.makeText(
-                                this@AddStudent,
-                                "Registration Failed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                })
-        }
-    }
-
-    private fun loginTeacher(teacherEmail: String?, teacherPassword: String?) {
-        mAuth!!.signInWithEmailAndPassword((teacherEmail)!!, (teacherPassword)!!)
-            .addOnCompleteListener(object : OnCompleteListener<AuthResult?> {
-                public override fun onComplete(task: Task<AuthResult?>) {
-                    if (task.isSuccessful()) {
-                        sendUserToMainActivity()
-                    } else {
-                        progressDialog!!.dismiss()
-                    }
-                }
-            })
-    }
-
-    private fun sendUserToMainActivity() {
-        val intent: Intent = Intent(this@AddStudent, TutorDashboard::class.java)
-        intent.putExtra("email", teacherEmail)
-        intent.putExtra("password", teacherPassword)
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-    }
-
-    //back button to previous Activity
-    public override fun onBackPressed() {
-        startActivity(Intent(this, AddUser::class.java))
-        return
     }
 }

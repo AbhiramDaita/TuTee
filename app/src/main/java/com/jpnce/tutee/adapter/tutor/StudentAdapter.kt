@@ -119,14 +119,7 @@ class StudentAdapter constructor(
                 markAsPresent(model, date)
             }
         })
-        holder.btn_remarks.setOnClickListener(object : View.OnClickListener {
-            public override fun onClick(v: View) {
-                progressDialog.setMessage("Marking Attendance")
-                progressDialog.setTitle("Attendance....")
-                progressDialog.show()
-                createDialog(model, date)
-            }
-        })
+
     }
 
     private fun createDialog(model: StudentModel?, date: String) {
@@ -214,7 +207,7 @@ class StudentAdapter constructor(
         val tv_todayDate: TextView
         val btn_present: Button
         val btn_absent: Button
-        val btn_remarks: Button
+
 
         init {
             tv_studentName = itemView.findViewById(R.id.tv_studentName)
@@ -222,7 +215,6 @@ class StudentAdapter constructor(
             tv_todayDate = itemView.findViewById(R.id.tv_todayDate)
             btn_present = itemView.findViewById(R.id.btn_present)
             btn_absent = itemView.findViewById(R.id.btn_absent)
-            btn_remarks = itemView.findViewById(R.id.btn_remarks)
         }
     }
 }

@@ -36,6 +36,31 @@
         android:id="@+id/rv_showAllSubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_appBar"
+        android:layout_below="@+id/sheetIDInput"
+        android:layout_marginTop="18dp"
         tools:listitem="@layout/layout_student" />
+
+    <EditText
+        android:id="@+id/sheetIDInput"
+        android:layout_width="229dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_appBar"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Enter Spread Sheet URL"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/getDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_appBar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_toEndOf="@+id/sheetIDInput"
+        android:text="Get data" />
 </RelativeLayout>

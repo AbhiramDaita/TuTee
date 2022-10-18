@@ -65,6 +65,13 @@ import com.jpnce.tutee.student.StudentResetPasswordActivity
 import com.jpnce.tutee.student.StudentViewNotes
 import com.jpnce.tutee.student.StudentDashboard
 import com.jpnce.tutee.student.StudentSignin
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 import java.util.ArrayList
 
 class TutorDashboard constructor() : AppCompatActivity() {
@@ -76,6 +83,7 @@ class TutorDashboard constructor() : AppCompatActivity() {
     var mList: MutableList<StudentModel?> = ArrayList()
     lateinit var recyclerView: RecyclerView
     var mAdapter: StudentAdapter? = null
+    lateinit var values : JSONArray
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutor_dashboard)
@@ -94,7 +102,6 @@ class TutorDashboard constructor() : AppCompatActivity() {
         intent = getIntent()
         email = intent.getStringExtra("email")
         password = intent.getStringExtra("password")
-        allStudent
         iv_addUser.setOnClickListener(object : View.OnClickListener {
             public override fun onClick(v: View) {
                 val intent: Intent = Intent(this@TutorDashboard, AddUser::class.java)
@@ -104,35 +111,41 @@ class TutorDashboard constructor() : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+        val getDataButton = findViewById<Button>(R.id.getDataBtn)
+        val sheetID = findViewById<EditText>(R.id.sheetIDInput)
+        val idText = sheetID as TextView
+        getDataButton.setOnClickListener {
+            val url = idText.text.toString()
+            val pattern = """/.*[^-\w]([-\w]{25,})[^-\w]?.*/""".toRegex()
+            val id = pattern.find(url)!!.groupValues[1]
+            getData(id)
+        }
     }
 
-    private val allStudent: Unit
-        private get() {
-            val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().getCurrentUser()
-            if (firebaseUser!!.getUid() != null) {
-                val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference()
-                    .child(TutorSignUp.Companion.STUDENTS_USER).child(
-                    firebaseUser.getUid()
-                )
-                reference.addListenerForSingleValueEvent(object : ValueEventListener {
-                    public override fun onDataChange(snapshot: DataSnapshot) {
-                        mList.clear()
-                        for (dataSnapshot: DataSnapshot in snapshot.getChildren()) {
-                            val model: StudentModel? = dataSnapshot.getValue(
-                                StudentModel::class.java
-                            )
-                            Log.d("TAG", "onDataChange: " + model!!.studentName)
-                            mList.add(model)
-                        }
-                        mAdapter = StudentAdapter(this@TutorDashboard, mList, firebaseUser.getUid())
-                        recyclerView!!.setAdapter(mAdapter)
-                    }
+    private fun getData(id : String){
+        val client = OkHttpClient()
 
-                    public override fun onCancelled(error: DatabaseError) {}
-                })
+        GlobalScope.launch{
+            val request = Request.Builder()
+                .url("https://sheets.googleapis.com/v4/spreadsheets/$id/values/Sheet1?key=AIzaSyCTeUin_e2F4IkbTqZ1QF1Z7APRENDDBR8")
+                .build()
+
+            client.newCall(request).execute().use{ response ->
+                if(!response.isSuccessful) throw IOException("Unexpected Code $response")
+
+                val resp = JSONObject(response.body!!.string())
+                values = resp.getJSONArray("values")
+                for(i in 1 until values.length()){
+                    val studentData = values.getJSONArray(i)
+                    mList.add(StudentModel(studentData[0].toString(),studentData[1].toString(),studentData[2].toString()))
+                }
+                runOnUiThread{
+                    val adapter = StudentAdapter(this@TutorDashboard,mList,"")
+                    recyclerView.adapter = adapter
+                }
             }
         }
-
+    }
     //back button to previous Activity
     public override fun onBackPressed() {
         startActivity(Intent(this, TutorRealDashboard::class.java))

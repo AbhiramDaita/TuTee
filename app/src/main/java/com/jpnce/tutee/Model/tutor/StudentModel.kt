@@ -70,15 +70,8 @@ import com.jpnce.tutee.student.StudentViewNotes
 import com.jpnce.tutee.student.StudentDashboard
 import com.jpnce.tutee.student.StudentSignin
 
-class StudentModel {
-    var studentName: String = ""
-    var studentSubject: String? = null
-    var studentEmail: String? = null
-
-    constructor() {}
-    constructor(studentName: String, studentSubject: String?, studentEmail: String?) {
-        this.studentName = studentName
-        this.studentSubject = studentSubject
-        this.studentEmail = studentEmail
-    }
-}
+data class StudentModel(
+    var studentName: String,
+    var studentSubject: String?,
+    var studentEmail: String?
+)
