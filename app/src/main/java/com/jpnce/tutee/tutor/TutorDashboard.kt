@@ -84,6 +84,7 @@ class TutorDashboard constructor() : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     var mAdapter: StudentAdapter? = null
     lateinit var values : JSONArray
+    lateinit var sheetId:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutor_dashboard)
@@ -117,7 +118,7 @@ class TutorDashboard constructor() : AppCompatActivity() {
         getDataButton.setOnClickListener {
             val url = idText.text.toString()
             val pattern = """/.*[^-\w]([-\w]{25,})[^-\w]?.*/""".toRegex()
-            val id = pattern.find(url)!!.groupValues[1]
+            sheetId = pattern.find(url)!!.groupValues[1]
             getData(id)
         }
     }
@@ -140,7 +141,7 @@ class TutorDashboard constructor() : AppCompatActivity() {
                     mList.add(StudentModel(studentData[0].toString(),studentData[1].toString(),studentData[2].toString()))
                 }
                 runOnUiThread{
-                    val adapter = StudentAdapter(this@TutorDashboard,mList,"")
+                    val adapter = StudentAdapter(this@TutorDashboard,mList,"",{studentModel, s, s2, i -> markAsPresent(studentModel,s,s2,i)},{studentModel, s, s2, i ->markAsAbsent(studentModel,s,s2,i)})
                     recyclerView.adapter = adapter
                 }
             }
@@ -150,5 +151,80 @@ class TutorDashboard constructor() : AppCompatActivity() {
     public override fun onBackPressed() {
         startActivity(Intent(this, TutorRealDashboard::class.java))
         return
+    }
+    private fun markAsPresent(model: StudentModel?, date: String,id:String,index:Int) {
+        val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().getCurrentUser()
+        val userId: String = firebaseUser!!.getUid()
+        val reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference().child(TutorSignUp.Companion.ATTENDANCE)
+                .child(model!!.studentName).child(date)
+        val hashMap: HashMap<String, String?> = HashMap()
+        hashMap.put("id", userId)
+        hashMap.put("studentName", model.studentName)
+        hashMap.put("email", model.studentEmail)
+        hashMap.put("studentSubject", model.studentSubject)
+        hashMap.put("present","Present")
+        hashMap.put("date", date)
+
+        val retroInstance = RetroInstance.getInstance().create(ApiInterface::class.java)
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("range","Sheet1!E${index+2}")
+        jsonObject.addProperty("majorDimension","ROWS")
+        val valuesList = JsonArray()
+        val values = JsonArray()
+        values.add("Present")
+        valuesList.add(values)
+        jsonObject.add("values",valuesList)
+        println(jsonObject)
+        val token = "Bearer ya29.a0Aa4xrXNAaYCTI2elJQteYLzCIIveDlJuBMtjYbpuDQIS1AzIFNuQpVeb9Q9FKdsK8JrOoUg8YTNWvCtRxM2u0mOWIHz2JbTIyJJgKsmJlRPdCYwBFOwasjlHQk4Yg0blbyyqVN5kx0b6YUybZ-MLlr80cQE_NAaCgYKATASARISFQEjDvL9NuJ8EeqPlQlX5MpV4sfQYQ0165"
+        val request = retroInstance.updateNotes(jsonObject,"E${index+2}",token,sheetId)
+        request.enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
+                println(response!!.raw().request.url)
+            }
+
+            override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
+                println("Fuck you")
+            }
+        })
+
+    }
+
+    private fun markAsAbsent(model: StudentModel?, date: String,id:String,index:Int) {
+        val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().getCurrentUser()
+        val userId: String = firebaseUser!!.getUid()
+        val reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference().child(TutorSignUp.Companion.ATTENDANCE)
+                .child(model!!.studentName).child(date)
+        val hashMap: HashMap<String, String?> = HashMap()
+        hashMap.put("id", userId)
+        hashMap.put("studentName", model.studentName)
+        hashMap.put("email", model.studentEmail)
+        hashMap.put("studentSubject", model.studentSubject)
+        hashMap.put("present","Present")
+        hashMap.put("date", date)
+
+        val retroInstance = RetroInstance.getInstance().create(ApiInterface::class.java)
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("range","Sheet1!E${index+2}")
+        jsonObject.addProperty("majorDimension","ROWS")
+        val valuesList = JsonArray()
+        val values = JsonArray()
+        values.add("Absent")
+        valuesList.add(values)
+        jsonObject.add("values",valuesList)
+        println(jsonObject)
+        val token = "Bearer ya29.a0Aa4xrXNAaYCTI2elJQteYLzCIIveDlJuBMtjYbpuDQIS1AzIFNuQpVeb9Q9FKdsK8JrOoUg8YTNWvCtRxM2u0mOWIHz2JbTIyJJgKsmJlRPdCYwBFOwasjlHQk4Yg0blbyyqVN5kx0b6YUybZ-MLlr80cQE_NAaCgYKATASARISFQEjDvL9NuJ8EeqPlQlX5MpV4sfQYQ0165"
+        val request = retroInstance.updateNotes(jsonObject,"E${index+2}",token,sheetId)
+        request.enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
+                println(response!!.raw().request.url)
+            }
+
+            override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
+                println("Fuck you")
+            }
+        })
+
     }
 }
