@@ -73,7 +73,9 @@ import java.util.HashMap
 class StudentAdapter constructor(
     private val mContext: Context,
     mList: List<StudentModel?>,
-    teacherId: String
+    teacherId: String,
+    var markAsPresent : (StudentModel?,String,String,Int)->Unit,
+    var markAsAbsent : (StudentModel?,String,String,Int)->Unit,
 ) : RecyclerView.Adapter<StudentAdapter.viewHolder>() {
     private var mList: List<StudentModel?> = ArrayList()
     private var teacherId: String = ""
@@ -101,102 +103,20 @@ class StudentAdapter constructor(
         val currentDate: LocalDate = LocalDate.now()
         val date: String = currentDate.toString()
         holder.tv_todayDate.setText(date)
-        holder.btn_present.setOnClickListener(object : View.OnClickListener {
-            public override fun onClick(v: View) {
-                progressDialog.setMessage("Marking Attendance")
-                progressDialog.setTitle("Attendance....")
-                progressDialog.show()
-                studentAttendance = "Present"
-                markAsPresent(model, date)
-            }
-        })
-        holder.btn_absent.setOnClickListener(object : View.OnClickListener {
-            public override fun onClick(v: View) {
-                progressDialog.setMessage("Marking Attendance")
-                progressDialog.setTitle("Attendance....")
-                progressDialog.show()
-                studentAttendance = "Absent"
-                markAsPresent(model, date)
-            }
-        })
+        holder.btn_present.setOnClickListener{
+            studentAttendance = "Present"
+            markAsPresent(model, date,teacherId,position)
+        }
+        holder.btn_absent.setOnClickListener{
+            studentAttendance = "Absent"
+            markAsAbsent(model,date,teacherId,position)
+        }
 
     }
 
-    private fun createDialog(model: StudentModel?, date: String) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(mContext)
-        val view: View = LayoutInflater.from(mContext).inflate(R.layout.custom_remarks, null, false)
-        builder.setView(view)
-        val et_remarks: EditText = view.findViewById(R.id.et_studentRemarks)
-        val btn_giveRemarks: Button = view.findViewById(R.id.btn_giveRemarks)
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
-        btn_giveRemarks.setOnClickListener(object : View.OnClickListener {
-            public override fun onClick(v: View) {
-                val remarks: String = et_remarks.getText().toString()
-                if (remarks.isEmpty()) {
-                    et_remarks.setError("Empty Remarks")
-                } else {
-                    progressDialog.setMessage("Adding Your Remarks")
-                    progressDialog.setTitle("Adding...")
-                    progressDialog.setCanceledOnTouchOutside(false)
-                    studentRemarks = remarks + "/10"
-                    markAsPresent(model, date)
-                    alertDialog.dismiss()
-                }
-            }
-        })
-    }
+   
 
-    //    private void giveRemarks(StudentModel model, String date) {
-    //        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    //        String userId = firebaseUser.getUid();
-    //
-    //        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(TutorSignUp.ATTENDANCE).child(model.getStudentName()).child(date);
-    //        HashMap<String, String> hashMap = new HashMap<>();
-    //        hashMap.put("id", userId);
-    //        hashMap.put("studentName", model.getStudentName());
-    //        hashMap.put("email", model.getStudentEmail());
-    //        hashMap.put("studentSubject", model.getStudentSubject());
-    //        hashMap.put("remarks", remarks+"/10");
-    //        hashMap.put("date", date);
-    //        reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-    //            @Override
-    //            public void onComplete(@NonNull Task<Void> task) {
-    //                progressDialog.dismiss();
-    //                if (task.isSuccessful()) {
-    //                    Toast.makeText(mContext, "Remarks Added Successfully", Toast.LENGTH_SHORT).show();
-    //                } else {
-    //                    Toast.makeText(mContext, "Remarks Added Failed", Toast.LENGTH_SHORT).show();
-    //                }
-    //            }
-    //        });
-    //    }
-    private fun markAsPresent(model: StudentModel?, date: String) {
-        val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().getCurrentUser()
-        val userId: String = firebaseUser!!.getUid()
-        val reference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference().child(TutorSignUp.Companion.ATTENDANCE)
-                .child(model!!.studentName).child(date)
-        val hashMap: HashMap<String, String?> = HashMap()
-        hashMap.put("id", userId)
-        hashMap.put("studentName", model.studentName)
-        hashMap.put("email", model.studentEmail)
-        hashMap.put("studentSubject", model.studentSubject)
-        hashMap.put("present", studentAttendance)
-        hashMap.put("remarks", studentRemarks)
-        hashMap.put("date", date)
-        reference.setValue(hashMap).addOnCompleteListener(object : OnCompleteListener<Void?> {
-            public override fun onComplete(task: Task<Void?>) {
-                progressDialog.dismiss()
-                if (task.isSuccessful()) {
-                    Toast.makeText(mContext, "Successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
+   
     public override fun getItemCount(): Int {
         return mList.size
     }
